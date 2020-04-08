@@ -1,4 +1,5 @@
 import time
+from decimal import Decimal
 
 def accepts(*types):
     def decorator(function):
@@ -11,12 +12,12 @@ def accepts(*types):
     return decorator
 
 def performance(file_name):
-    start = time.time()
-    file1 = open(file_name,"a")
     def decorator(function):
         def wrapper(*args, **kwargs):
+            start = time.time()
+            file1 = open(file_name,"a")
             retval = function(*args, **kwargs)
-            file1.write(f'It took us {time.time()-start} seconds to run this.\n')
+            file1.write(f'It took us {Decimal(time.time()-start)} seconds to run this.\n')
             file1.close()
             return retval
         return wrapper
