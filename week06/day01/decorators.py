@@ -22,5 +22,15 @@ def performance(file_name):
         return wrapper
     return decorator
 
-
-
+def silence(file_name):
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            try:
+                function(*args, *kwargs)
+            except Exception as e:
+                file1 = open(file_name, "a")
+                file1.write(f"Calling {function.__name__} raised an error - '{type(e).__name__}' - {e}. With arguments --> {*args, *kwargs}\n")
+                file1.close()
+            return function(*args, *kwargs)
+        return wrapper
+    return decorator
