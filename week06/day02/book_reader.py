@@ -2,10 +2,10 @@ import zipfile
 from os import listdir
 from os.path import isfile, join
 
-def book_reader(bookpath):
+def book_reader(zipbookpath):
     book_reader.counter = 0
     #extracting the book in subderictory
-    with zipfile.ZipFile(bookpath, 'r') as zip_ref:
+    with zipfile.ZipFile(zipbookpath, 'r') as zip_ref:
         zip_ref.extractall('./book')
     #list of bookfiles
     bookfiles = [f for f in listdir('./book/') if isfile(join('./book/', f))]
@@ -44,3 +44,10 @@ def book_reader(bookpath):
             else:
                 break
     return book_reader.counter
+
+
+def main():
+    book_reader('newbook.zip')
+
+if __name__ == "__main__":
+    main()
