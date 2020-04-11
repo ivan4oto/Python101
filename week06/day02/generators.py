@@ -1,7 +1,3 @@
-import zipfile
-from os import listdir
-from os.path import isfile, join
-
 def chain(one, two):
     for x in one:
         yield x
