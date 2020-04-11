@@ -3,6 +3,7 @@ from os import listdir
 from os.path import isfile, join
 
 def book_reader(bookpath):
+    book_reader.counter = 0
     #extracting the book in subderictory
     with zipfile.ZipFile(bookpath, 'r') as zip_ref:
         zip_ref.extractall('./book')
@@ -24,6 +25,7 @@ def book_reader(bookpath):
                         x = next(lines)
                         if x.startswith('#'):
                             print(toprint)
+                            book_reader.counter += 1
                             toprint = x
                             t = False
                             break
@@ -31,6 +33,7 @@ def book_reader(bookpath):
                             toprint+=x
                     except Exception:
                         print(toprint)
+                        book_reader.counter += 1
                         print('This was the end of the file\n')
                         if file != bookfiles[-1]:
                             print('If you wish to continue reading. Press "Space". If not, press something else.')
@@ -40,3 +43,4 @@ def book_reader(bookpath):
                         break
             else:
                 break
+    return book_reader.counter
