@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from decimal import getcontext, MAX_PREC
+from decimal import getcontext, MAX_PREC, Decimal
 from time import time, sleep
 
 class SilenceException:
@@ -47,24 +47,23 @@ def change_precision(precision):
 
 class MeasurePerformance:
     def __init__(self):
+        self.bmarks = 0
+        self.starttime = time()
         pass
 
     def __enter__(self):
-        self.starttime = time()
         return self
-        
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        print(time() - self.starttime)
 
-@contextmanager
-def measure_performance():
-    try:
-        starttime = time()
-        yield
-    except Exception:
-        pass
-    finally:
-        print(time() - starttime)
+    def benchmark(self, msg = None, restart = False):
+        self.bmarks += 1
+        if msg == None:
+            print(f'Benchmark No. {self.bmarks}: {Decimal(time() - self.starttime)}')
+        elif msg != None:
+            print(f'{msg}: {Decimal(time() - self.starttime)}')
+        if restart:
+            self.starttime = time()
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        print(f'Finished for: {Decimal(time() - self.starttime)}')
 
 def main():
     pass

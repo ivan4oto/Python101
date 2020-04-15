@@ -1,9 +1,10 @@
 import unittest
+from unittest import mock
+from unittest.mock import patch
+import io
 from decimal import Decimal
 from time import sleep
-import io
-import sys
-from context_managers import silence_exception, SilenceException, ChangePrecision, change_precision, MeasurePerformance, measure_performance
+from context_managers import silence_exception, SilenceException, ChangePrecision, change_precision, MeasurePerformance
 
 # Marto's tests ................................................
 class SilenceExceptionTests(unittest.TestCase):
@@ -137,31 +138,24 @@ class ChangePrecisionFuncTests(unittest.TestCase):
         self.assertEqual(str(result), '3.355452132')
 
 class MeasurePerfomanceClassTests(unittest.TestCase):
-    def test_measure_performance_returns_correct_value(self):        
-        capturedOutput = io.StringIO()
-        sys.stdout = capturedOutput 
-        with MeasurePerformance():
-            sleep(1)
-            x = 1+2
-            sleep(1)
-        result = str(capturedOutput.getvalue())[0]
-        sys.stdout = sys.__stdout__
+    def test_MeasurePerformance_prints_corrent_steps(self):
+        with mock.patch('sys.stdout', new = io.StringIO()) as fake_stdout:
+                with MeasurePerformance() as p:
+                    sleep(1)
+                    p.benchmark('1st step')
 
-        self.assertEqual(result, '2')
+                    sleep(2)
+                    p.benchmark('2nd step', restart=True)
 
-class MeasurePerfomanceFuncTests(unittest.TestCase):
-    def test_measure_performance_returns_correct_value(self):        
-        capturedOutput = io.StringIO()
-        sys.stdout = capturedOutput 
-        with measure_performance():
-            sleep(1)
-            x = 1+2
-            sleep(1)
-        result = str(capturedOutput.getvalue())[0]
-        sys.stdout = sys.__stdout__
+                    sleep(3)
+                    p.benchmark()
+        expectedlist = ['1st step', '2nd step', 'Benchmark No. 3', 'Finished for']
+        result = fake_stdout.getvalue().split('\n')
 
-        self.assertEqual(result, '2')
-
+        for i in result:
+            i = i.split(':')
+            if i[0] != '':
+                self.assertIn(i[0], expectedlist)
 
 if __name__ == '__main__':
     unittest.main()
