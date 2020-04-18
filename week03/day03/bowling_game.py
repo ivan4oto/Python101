@@ -26,6 +26,7 @@ class BowlingGame:
                 self.strikeslist = []
 
         return roll1 + roll2
+
     def play(self):
         while self._frames > 0:
             if len(self.strikeslist) < 2:
