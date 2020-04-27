@@ -25,10 +25,10 @@ INSERT INTO languages (id, language, answer, answered, guide)
   VALUES (8, "JavaScript", "Douglas Crockford", 0, "NodeJS time. Go to JavaScript folder and Node your way!");
 
 ALTER TABLE languages
-  ADD rating INT;
+  ADD column rating INT CHECK (rating BETWEEN 0 and 9);
 
 UPDATE languages
-SET rating = 9
+SET rating = 1
 WHERE language = "Python";
 
 UPDATE languages
@@ -61,11 +61,7 @@ WHERE language = "Go";
 
 UPDATE languages
 SET Answered = 1
-WHERE language = "Go"
-
-UPDATE languages
-SET Answered = 1
-WHERE language = "Python"
+WHERE language = "Python" or language = "Go"
 
 SELECT * from languages
 Where answer = '200 OK' or answer = 'Lambda';
