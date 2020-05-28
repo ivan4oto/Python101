@@ -1,0 +1,12 @@
+{% extends "solutions/base.html" %} {% block content %}
+<a href="{% url 'education:solutions:create' %}">Add new</a>
+
+{% if solutions %}
+<ul>
+  {% for solution in solutions %}
+  <li><a href="{% url 'education:solutions:detail' solution.id %}">{{ solution.url }}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p><strong>No solutions yet.</strong></p>
+{% endif %} {% endblock %}

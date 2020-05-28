@@ -1,0 +1,12 @@
+{% extends "tasks/base.html" %} {% block content %}
+<a href="{% url 'education:tasks:create' %}">Add new</a>
+
+{% if tasks %}
+<ul>
+  {% for task in tasks %}
+  <li><a href="{% url 'education:tasks:detail' task.id %}">{{ task.name }}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p><strong>No tasks yet.</strong></p>
+{% endif %} {% endblock %}
